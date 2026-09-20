@@ -10,7 +10,7 @@ MENU = {
     "gaseosa": 3500
 }
 
-NUM_MESAS = 12
+NUM_MESAS = 3
 
 
 def mostrar_menu():
@@ -33,7 +33,7 @@ def calcular_mesa(frias, picadas, aguardientes):
         (aguardientes * MENU["aguardiente"])
     )
     
-    # Propina del 10% si el subtotal alcanza los $100.000
+    # Propina del 10% si el subtotal alcanza o superalos $100.000
     propina = subtotal * 0.10 if subtotal >= 100000 else 0
     total = subtotal + propina
     
