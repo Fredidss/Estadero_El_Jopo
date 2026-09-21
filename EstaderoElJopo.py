@@ -24,11 +24,12 @@ def mostrar_menu():
     print("-" * 35)
 
 # calcular el total de todas las mondades que pidieron en la mesa
-def calcular_mesa(frias, picadas, aguardientes):
+def calcular_mesa(frias, picadas, aguardientes, gaseosa):
     subtotal = (
         (frias * MENU["fria"]) +
         (picadas * MENU["picada"]) +
         (aguardientes * MENU["aguardiente"])
+        (gaseosa * MENU["gaseosa"])
     )
 
     propina = 0
@@ -40,9 +41,8 @@ def calcular_mesa(frias, picadas, aguardientes):
     
     return subtotal, propina, total
 
-
+#Imprime la liquidación de todas las mesas cargadas
 def generar_reporte(historial_mesas):
-    """Imprime la liquidación de todas las mesas cargadas."""
     print("\n" + "=" * 45)
     print("        REPORTE GENERAL DE CAJA")
     print("=" * 45)
@@ -55,13 +55,26 @@ def generar_reporte(historial_mesas):
         total_propinas += propina
         print(f"Mesa #{mesa:02d} | Consumo: ${subtotal:9,.0f} | Propina: ${propina:7,.0f} | Total: ${total:9,.0f}")
 
-    print("-" * 45)
+    print("-"* 45)
     print(f"VENTAS TOTALES (Sin propina) : ${total_ventas:,.0f}")
     print(f"TOTAL PROPINAS RECAUDADAS   : ${total_propinas:,.0f}")
     print(f"GRAN TOTAL EN CAJA          : ${(total_ventas + total_propinas):,.0f}")
     print("=" * 45)
 
-
+def registrar_pedido(mesas):
+    num_mesa = int(input(f"Ingrese número de mesa (1-{NUM_MESAS}): "))      
+    if 1 <= num_mesa <= NUM_MESAS:
+        print(f"\n--- Registrar consumo Mesa #{num_mesa} ---")
+        frias = int(input("¿Cuántas frías? "))
+        picadas = int(input("¿Cuántas picadas? "))
+        aguardientes = int(input("¿Cuántos aguardientes? "))
+    
+        subtotal, propina, total = calcular_mesa(frias, picadas, aguardientes)
+        mesas[num_mesa] = (subtotal, propina, total)
+        print(f"✔ Pedido cargado con éxito a la Mesa #{num_mesa}!")
+    else:
+        print("❌ Número de mesa inválido.")
+       
 # ------------------------------------------
 # FLUJO PRINCIPAL INTERACTIVO
 # ------------------------------------------
@@ -84,19 +97,7 @@ if __name__ == "__main__":
             mostrar_menu()
 
         elif opcion == "2":
-            num_mesa = int(input(f"Ingrese número de mesa (1-{NUM_MESAS}): "))
-            if 1 <= num_mesa <= NUM_MESAS:
-                print(f"\n--- Registrar consumo Mesa #{num_mesa} ---")
-                frias = int(input("¿Cuántas frías? "))
-                picadas = int(input("¿Cuántas picadas? "))
-                aguardientes = int(input("¿Cuántos aguardientes? "))
-
-                subtotal, propina, total = calcular_mesa(frias, picadas, aguardientes)
-                mesas[num_mesa] = (subtotal, propina, total)
-                print(f"✔ Pedido cargado con éxito a la Mesa #{num_mesa}!")
-            else:
-                print("❌ Número de mesa inválido.")
-
+            registrar_pedido(mesas)
         elif opcion == "3":
             num_mesa = int(input(f"Ingrese número de mesa a consultar (1-{NUM_MESAS}): "))
             if num_mesa in mesas:
