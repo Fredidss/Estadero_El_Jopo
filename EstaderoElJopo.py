@@ -11,24 +11,31 @@ MENU = {
 }
 
 NUM_MESAS = 3
+PORCENTAJE_PROPINA = 0.10
+PROPINA_MINIMA = 100000
 
-
+# mostrar la carta oficial de el jopo
 def mostrar_menu():
-    """Muestra la carta oficial del estadero."""
     print("\n--- MENÚ DE PRECIOS - EL JOPO ---")
+
     for producto, precio in MENU.items():
         print(f"  - {producto.capitalize()}: ${precio:,}")
+
     print("-" * 35)
 
-
+# calcular el total de todas las mondades que pidieron en la mesa
 def calcular_mesa(frias, picadas, aguardientes):
-    """Calcula el subtotal, propina y total consumido."""
     subtotal = (
         (frias * MENU["fria"]) +
         (picadas * MENU["picada"]) +
         (aguardientes * MENU["aguardiente"])
     )
-    propina = subtotal * 0.10 if subtotal >= 100000 else 0
+
+    propina = 0
+
+    if subtotal >= PROPINA_MINIMA:
+        propina = subtotal * PORCENTAJE_PROPINA
+
     total = subtotal + propina
     
     return subtotal, propina, total
